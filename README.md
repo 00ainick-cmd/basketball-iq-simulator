@@ -4,7 +4,20 @@
 
 Built for Julie — an interactive game that teaches basketball strategy through real scenarios.
 
-🔗 **[Play Now: V3 (Photorealistic Court)](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-sim-v3.html)**
+🔥 **[JULIE'S TRAINER V4 — PLAY NOW](https://00ainick-cmd.github.io/basketball-iq-simulator/julie-trainer.html)** 🔥
+
+✨ **Premium Features:**
+- Custom Julie player badge & logo
+- Mobile-first design (optimized for phones)
+- AI voice coach (speaks feedback out loud)
+- 5 aggressive point guard scenarios
+- Larger, clearer player visualization
+- Personal branding throughout
+
+---
+
+**Other Versions:**
+- [V3 (Photorealistic Court)](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-sim-v3.html)
 
 ## What It Does
 
