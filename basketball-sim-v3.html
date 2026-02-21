@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏀 Basketball IQ Trainer — AI-Powered Decision Training</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1d35 50%, #0a0e27 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(255,107,53,0.4);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        
+        .tagline {
+            color: #8b90a0;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 12px;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,107,53,0.5);
+            box-shadow: 0 8px 24px rgba(255,107,53,0.15);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #8b90a0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .court-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        #court-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        
+        #basketball-court {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-you { background: linear-gradient(135deg, #ffa500 0%, #ff8c42 100%); }
+        .player-teammate { background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%); }
+        .player-defender { background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%); }
+        
+        .scenario-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .scenario-header {
+            margin-bottom: 20px;
+        }
+        
+        .scenario-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        .scenario-description {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #b0b5c3;
+            font-weight: 500;
+        }
+        
+        .plays-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .play-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .play-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35 0%, #ffa500 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .play-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,107,53,0.6);
+            background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(255,107,53,0.05) 100%);
+            box-shadow: 0 12px 32px rgba(255,107,53,0.2);
+        }
+        
+        .play-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .play-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        
+        .play-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .play-description {
+            font-size: 0.95rem;
+            color: #8b90a0;
+            line-height: 1.5;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 35px;
+            margin-top: 25px;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .result-card.show { display: block; }
+        
+        .result-card.success {
+            border-color: rgba(16,185,129,0.5);
+            background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
+        }
+        
+        .result-card.partial {
+            border-color: rgba(251,191,36,0.5);
+            background: linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.05) 100%);
+        }
+        
+        .result-card.failure {
+            border-color: rgba(239,68,68,0.5);
+            background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+        
+        .result-badge.success {
+            background: rgba(16,185,129,0.2);
+            color: #10b981;
+        }
+        
+        .result-badge.partial {
+            background: rgba(251,191,36,0.2);
+            color: #fbbf24;
+        }
+        
+        .result-badge.failure {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .result-title.success { color: #10b981; }
+        .result-title.partial { color: #fbbf24; }
+        .result-title.failure { color: #ef4444; }
+        
+        .result-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #d1d5db;
+            margin-bottom: 20px;
+        }
+        
+        .coaching-box {
+            background: rgba(99,102,241,0.1);
+            border-left: 4px solid #6366f1;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .coaching-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #818cf8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .coaching-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+            margin-top: 20px;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255,107,53,0.4);
+        }
+        
+        .next-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.6rem; }
+            .plays-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🏀</div>
+                <h1>Basketball IQ Trainer</h1>
+            </div>
+            <p class="tagline">AI-Powered Decision Training for Elite Players</p>
+            <div class="ai-badge">⚡ Powered by AI</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Scenarios</div>
+                <div class="stat-value" id="scenarios-completed">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Smart Plays</div>
+                <div class="stat-value" id="smart-decisions">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Basketball IQ</div>
+                <div class="stat-value" id="bball-iq">0%</div>
+            </div>
+        </div>
+
+        <div class="court-section">
+            <div id="court-container">
+                <canvas id="basketball-court" width="1792" height="1024"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot player-you"></div>
+                    <span>You (Julie)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot player-teammate"></div>
+                    <span>Teammate</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot player-defender"></div>
+                    <span>Defender</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scenario-card" id="scenario-panel">
+            <div class="scenario-header">
+                <div class="scenario-number" id="scenario-number">Scenario 1</div>
+                <div class="scenario-title" id="scenario-title">Loading...</div>
+                <div class="scenario-description" id="scenario-desc">Please wait...</div>
+            </div>
+            <div class="plays-grid" id="play-options"></div>
+        </div>
+
+        <div class="result-card" id="result-panel">
+            <div class="result-badge" id="result-badge">Result</div>
+            <div class="result-title" id="result-title">Result</div>
+            <div class="result-text" id="result-desc"></div>
+            <div id="coaching-section"></div>
+            <button class="next-btn" onclick="nextScenario()">Continue Training →</button>
+        </div>
+    </div>
+
+    <script>
+        let stats = { completed: 0, smart: 0, total: 0 };
+        const canvas = document.getElementById('basketball-court');
+        const ctx = canvas.getContext('2d');
+        
+        // Load the realistic court background
+        const courtBg = new Image();
+        courtBg.src = 'court-images/001-professional-indoor-basketball-court-fro.png';
+
+        const scenarios = [
+            {
+                id: 1,
+                title: "3-2 Zone Defense — Wing Position",
+                description: "You're on the right wing with the ball. The zone has shifted toward you with two defenders closing in fast. Your corner teammate is wide open. What's your move?",
+                court: {
+                    you: { x: 1350, y: 450, hasBall: true },
+                    teammates: [
+                        { x: 900, y: 330, label: "Guard" },
+                        { x: 450, y: 600, label: "Post" },
+                        { x: 900, y: 900, label: "Corner" }
+                    ],
+                    defenders: [
+                        { x: 1230, y: 405 },
+                        { x: 1125, y: 525 },
+                        { x: 675, y: 420 },
+                        { x: 525, y: 780 },
+                        { x: 975, y: 825 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🎯",
+                        title: "Pass to Corner",
+                        description: "Quick skip pass to the open corner shooter",
+                        result: "success",
+                        outcome: "ELITE DECISION",
+                        details: "Perfect read! The corner is the toughest spot for a zone to defend. Your pass forced a scramble rotation and created a wide-open three-pointer. This is high-level basketball IQ.",
+                        coaching: "Against zone defense, the corner pass is gold. When two defenders collapse on you, someone MUST be open. You recognized it and made the right play instantly.",
+                        points: 2
+                    },
+                    {
+                        icon: "🏃",
+                        title: "Baseline Drive",
+                        description: "Attack the baseline with an aggressive drive",
+                        result: "partial",
+                        outcome: "DECENT PLAY",
+                        details: "You drew contact and got to the line (1-2 FT). Not bad, but the defense recovered quickly. A smarter pass was available for an easier bucket.",
+                        coaching: "Driving baseline works, but against a zone it's risky. The help defender was waiting. When you have an open shooter, feed them first.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Forced Three",
+                        description: "Pull up for a contested three-pointer",
+                        result: "failure",
+                        outcome: "POOR DECISION",
+                        details: "Two defenders were in your face. The shot was heavily contested and you missed. Meanwhile, your teammate in the corner was wide open.",
+                        coaching: "Forcing a contested shot when a teammate is open shows low basketball IQ. Great shooters pass up bad shots for better ones. Move the ball.",
+                        points: 0
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Fast Break — 3 on 2 Advantage",
+                description: "You're pushing the ball in transition with a 3-on-2 advantage. One defender is stepping up to you at the arc, the other is protecting the rim. Your wing players are filling the lanes. Decision time!",
+                court: {
+                    you: { x: 900, y: 825, hasBall: true },
+                    teammates: [
+                        { x: 525, y: 600, label: "Left" },
+                        { x: 1275, y: 600, label: "Right" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 525 },
+                        { x: 900, y: 270 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🎯",
+                        title: "Hit the Wing",
+                        description: "Pass to the open wing for an easy finish",
+                        result: "success",
+                        outcome: "TEXTBOOK",
+                        details: "Perfect! You forced the defender to commit, then delivered a perfect pass for an open layup. This is exactly how you beat a 3-on-2.",
+                        coaching: "On a numbers advantage, your job is to attack and create. You drew help, made the right read, and created an easy bucket. Pro-level execution.",
+                        points: 2
+                    },
+                    {
+                        icon: "💥",
+                        title: "Drive All the Way",
+                        description: "Take it strong to the basket yourself",
+                        result: "partial",
+                        outcome: "TOUGH FINISH",
+                        details: "You drew a foul and made 1 of 2 free throws. Physical play, but you had teammates in better position for easier shots.",
+                        coaching: "Attacking isn't wrong, but on a 3-on-2 the defense WANTS you to drive so they can collapse. Make them pay by passing to the advantage.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Pull Back, Run Set",
+                        description: "Slow down and set up half-court offense",
+                        result: "failure",
+                        outcome: "WASTED",
+                        details: "By the time you set up, the defense got back. You gave up a 3-on-2 advantage for a contested half-court possession. Opportunity wasted.",
+                        coaching: "NEVER slow down a numbers advantage. 3-on-2 is one of the highest percentage scoring opportunities in basketball. Attack immediately!",
+                        points: 0
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "High Post Command Center",
+                description: "You caught the ball at the high post (free throw line extended). The zone is set in a 2-3. You have a clean shooting lane, but you also see cutters slashing to the rim. Elite players make elite reads. What do you see?",
+                court: {
+                    you: { x: 900, y: 570, hasBall: true },
+                    teammates: [
+                        { x: 450, y: 300, label: "Cut", moving: true },
+                        { x: 1350, y: 300, label: "Cut", moving: true },
+                        { x: 750, y: 870, label: "Guard" }
+                    ],
+                    defenders: [
+                        { x: 525, y: 420 },
+                        { x: 1275, y: 420 },
+                        { x: 525, y: 780 },
+                        { x: 900, y: 870 },
+                        { x: 1275, y: 780 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🎯",
+                        title: "Thread the Needle",
+                        description: "Bounce pass to the cutter attacking the rim",
+                        result: "success",
+                        outcome: "ELITE VISION",
+                        details: "You saw the cutter a split second before the defense reacted. Your bounce pass was perfectly timed for an easy layup. This is high-level court vision.",
+                        coaching: "The high post is the 'point guard spot' for a reason — you can see everything. When cutters move and help is late, punish them. Elite playmaking.",
+                        points: 2
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Mid-Range Jumper",
+                        description: "Take the open shot from the elbow",
+                        result: "partial",
+                        outcome: "GOOD SHOT",
+                        details: "You knocked down the mid-range jumper. Solid shot, but your cutter had an even easier look at the rim.",
+                        coaching: "Mid-range isn't bad if you can hit it, but basketball IQ means taking the BEST available shot. Layup > mid-range. Always look for the easiest bucket first.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Swing to Perimeter",
+                        description: "Pass back out to reset the offense",
+                        result: "failure",
+                        outcome: "OPPORTUNITY LOST",
+                        details: "You had an open shot AND cutters attacking, but you passed backward. The defense recovered and you got a contested shot 10 seconds later.",
+                        coaching: "Never pass up an advantage. When you're open at the high post with cutters moving, MAKE A DECISION. Shoot or feed the cutter. Don't waste it.",
+                        points: 0
+                    }
+                ]
+            }
+        ];
+
+        let currentScenarioIndex = 0;
+        let currentScenario = null;
+
+        function drawCourt(scenarioData) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw the realistic court background
+            ctx.drawImage(courtBg, 0, 0, canvas.width, canvas.height);
+
+            // Draw defenders
+            scenarioData.defenders.forEach(d => {
+                // Shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                ctx.beginPath();
+                ctx.arc(d.x + 4, d.y + 4, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Player circle with gradient
+                const defGrad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, 28);
+                defGrad.addColorStop(0, '#ff4757');
+                defGrad.addColorStop(1, '#ee1f35');
+                ctx.fillStyle = defGrad;
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // White border
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                
+                // Label
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 18px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('D', d.x, d.y);
+            });
+
+            // Draw teammates
+            scenarioData.teammates.forEach(t => {
+                // Shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                ctx.beginPath();
+                ctx.arc(t.x + 4, t.y + 4, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Player circle with gradient
+                const teamGrad = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, 28);
+                teamGrad.addColorStop(0, '#00d4ff');
+                teamGrad.addColorStop(1, '#0077ff');
+                ctx.fillStyle = teamGrad;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, 28, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // White border
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                
+                // Label
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(t.label, t.x, t.y + 50);
+
+                // Movement arrow
+                if (t.moving) {
+                    ctx.strokeStyle = '#10b981';
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.moveTo(t.x, t.y + 30);
+                    ctx.lineTo(t.x, t.y - 45);
+                    ctx.stroke();
+                    // Arrow head
+                    ctx.fillStyle = '#10b981';
+                    ctx.beginPath();
+                    ctx.moveTo(t.x, t.y - 48);
+                    ctx.lineTo(t.x - 8, t.y - 35);
+                    ctx.lineTo(t.x + 8, t.y - 35);
+                    ctx.fill();
+                }
+            });
+
+            // Draw player (you) - larger and more prominent
+            const youX = scenarioData.you.x;
+            const youY = scenarioData.you.y;
+            
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.beginPath();
+            ctx.arc(youX + 5, youY + 5, 35, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Player circle with gradient
+            const youGrad = ctx.createRadialGradient(youX, youY, 0, youX, youY, 35);
+            youGrad.addColorStop(0, '#ffb820');
+            youGrad.addColorStop(1, '#ff8c00');
+            ctx.fillStyle = youGrad;
+            ctx.beginPath();
+            ctx.arc(youX, youY, 35, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // White border (thicker)
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Ball
+            if (scenarioData.you.hasBall) {
+                ctx.fillStyle = '#ff6b35';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(youX + 28, youY - 28, 14, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Ball lines
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(youX + 28 - 10, youY - 28);
+                ctx.lineTo(youX + 28 + 10, youY - 28);
+                ctx.moveTo(youX + 28, youY - 28 - 10);
+                ctx.lineTo(youX + 28, youY - 28 + 10);
+                ctx.stroke();
+            }
+
+            // YOU label
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('YOU', youX, youY + 60);
+        }
+
+        function loadScenario(index) {
+            currentScenario = scenarios[index];
+            
+            // Wait for court image to load before drawing
+            if (courtBg.complete) {
+                drawCourt(currentScenario.court);
+            } else {
+                courtBg.onload = () => drawCourt(currentScenario.court);
+            }
+
+            document.getElementById('scenario-number').textContent = `Scenario ${currentScenario.id}`;
+            document.getElementById('scenario-title').textContent = currentScenario.title;
+            document.getElementById('scenario-desc').textContent = currentScenario.description;
+
+            const optionsContainer = document.getElementById('play-options');
+            optionsContainer.innerHTML = '';
+
+            currentScenario.plays.forEach((play, i) => {
+                const card = document.createElement('div');
+                card.className = 'play-card';
+                card.onclick = () => selectPlay(i);
+                card.innerHTML = `
+                    <div class="play-icon">${play.icon}</div>
+                    <div class="play-title">${play.title}</div>
+                    <div class="play-description">${play.description}</div>
+                `;
+                optionsContainer.appendChild(card);
+            });
+
+            document.getElementById('result-panel').classList.remove('show');
+            document.getElementById('scenario-panel').style.display = 'block';
+        }
+
+        function selectPlay(playIndex) {
+            stats.total++;
+            const play = currentScenario.plays[playIndex];
+
+            if (play.result === 'success') stats.smart++;
+
+            document.getElementById('scenario-panel').style.display = 'none';
+            
+            const resultPanel = document.getElementById('result-panel');
+            resultPanel.className = 'result-card show ' + play.result;
+            
+            const badge = document.getElementById('result-badge');
+            badge.className = 'result-badge ' + play.result;
+            badge.textContent = play.result === 'success' ? '✓ Success' : play.result === 'partial' ? '⚠ Partial' : '✗ Miss';
+            
+            const resultTitle = document.getElementById('result-title');
+            resultTitle.textContent = play.outcome;
+            resultTitle.className = 'result-title ' + play.result;
+
+            document.getElementById('result-desc').textContent = play.details;
+
+            document.getElementById('coaching-section').innerHTML = `
+                <div class="coaching-box">
+                    <div class="coaching-label">
+                        <span>🧠</span>
+                        <span>AI Coach Analysis</span>
+                    </div>
+                    <div class="coaching-text">${play.coaching}</div>
+                </div>
+            `;
+
+            updateStats();
+        }
+
+        function nextScenario() {
+            stats.completed++;
+            currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            loadScenario(currentScenarioIndex);
+            updateStats();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStats() {
+            document.getElementById('scenarios-completed').textContent = stats.completed;
+            document.getElementById('smart-decisions').textContent = stats.smart;
+            const iq = stats.total > 0 ? Math.round((stats.smart / stats.total) * 100) : 0;
+            document.getElementById('bball-iq').textContent = iq + '%';
+        }
+
+        loadScenario(0);
+        updateStats();
+    </script>
+</body>
+</html>
