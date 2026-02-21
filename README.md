@@ -4,32 +4,42 @@
 
 Built for Julie — an interactive game that teaches basketball strategy through real scenarios.
 
-🏆 **[BASKETBALL TRAINER V5 — THE REAL THING](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-trainer-v5.html)** 🏆
+🏆 **[BASKETBALL TRAINING SYSTEM V6 — THE COMPLETE SYSTEM](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-trainer-v6.html)** 🏆
 
-**COMPLETE REBUILD — This Actually Teaches Basketball**
+**BUILT FROM SCRATCH — The Real Basketball Training System**
 
-✅ **Progressive Lesson System:**
-- Lesson 1: Reading the Defender (feet, hips, hands)
-- Lesson 2: Attack Moves (when to use each move)
-- Lesson 3: Game Time Application
+✅ **Complete Move Library (14 Moves):**
+- **Attack Moves:** Crossover, Between-Legs, Hesi, Behind-Back, Spin, First-Step Explosion, Change of Pace
+- **Finishing Moves:** Euro Step, Reverse Layup, Finger Roll, Floater, Power Finish, Up-and-Under, Step-Through
+- Each move shows: When to use, Proper technique, Coach Betty tips
 
-✅ **Visual Teaching:**
-- Defender stance labeled on court (TIGHT/OFF/UNDER)
-- Movement arrows showing plays
-- HUGE player icons (easy to see on mobile)
-- "The Read" highlighted before every decision
+✅ **Zone Defense Focus:**
+- 5 game scenarios vs 2-3 and 3-2 zones
+- Wing attack, High post flash, Corner attack, Pick & roll, Transition
+- Teaches aggressive zone offense
 
-✅ **Real Coaching Methodology:**
-- Teaches WHAT to look for first
-- Coach Betty quotes in feedback
-- Progressive skill building
-- Not a guessing game — actual training
+✅ **Accurate Court Diagrams:**
+- Top-down court view with shaded zone coverage
+- Attack lanes marked (green = open)
+- Proper basketball positioning
+- Movement arrows
+
+✅ **Personalized Tracking:**
+- Tracks every decision
+- Success rate calculation
+- Pattern analysis
+- Performance feedback
+
+✅ **Professional Coaching:**
+- Betty Lennox methodology
+- Proper basketball terminology
+- Specific, actionable feedback
 
 ---
 
 **Previous Versions:**
+- [V5 (Progressive Lessons)](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-trainer-v5.html)
 - [V4 (Julie's Custom Trainer)](https://00ainick-cmd.github.io/basketball-iq-simulator/julie-trainer.html)
-- [V3 (Photorealistic Court)](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-sim-v3.html)
 
 ## What It Does
 
