@@ -695,61 +695,105 @@
             drawCourtDiagram(scenario.court);
         }
 
+        const courtBgImage = new Image();
+        courtBgImage.src = 'court-images/001-professional-indoor-basketball-court-fro.png';
+
         function drawCourtDiagram(courtData) {
             const canvas = document.getElementById('court');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Court
-            ctx.fillStyle = '#1a472a';
-            ctx.fillRect(0, 0, 600, 500);
+            // Draw realistic court background
+            ctx.drawImage(courtBgImage, 0, 0, 600, 500);
             
-            // Lines
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(50, 50, 500, 400);
-            ctx.beginPath();
-            ctx.arc(300, 70, 80, 0.2, Math.PI - 0.2);
-            ctx.stroke();
-            
-            // Zone shading (example for 2-3)
+            // Zone shading overlay (semi-transparent)
             if (courtData.zone.includes('2-3')) {
-                ctx.fillStyle = 'rgba(255,77,87,0.15)';
-                ctx.fillRect(100, 70, 200, 180);
-                ctx.fillRect(300, 70, 200, 180);
-                ctx.fillRect(150, 250, 300, 150);
+                ctx.fillStyle = 'rgba(255,77,87,0.12)';
+                // Top two defenders
+                ctx.fillRect(100, 60, 170, 140);
+                ctx.fillRect(330, 60, 170, 140);
+                // Bottom three defenders
+                ctx.fillRect(130, 200, 340, 120);
             }
             
-            // YOU
-            ctx.fillStyle = '#ffa500';
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 4;
+            if (courtData.zone.includes('3-2')) {
+                ctx.fillStyle = 'rgba(255,77,87,0.12)';
+                // Top three
+                ctx.fillRect(80, 60, 440, 130);
+                // Bottom two
+                ctx.fillRect(150, 190, 130, 130);
+                ctx.fillRect(320, 190, 130, 130);
+            }
+            
+            // YOU (larger, more visible)
             let youX = 450, youY = 300;
             if (courtData.you === 'high-post') { youX = 300; youY = 250; }
             if (courtData.you === 'corner') { youX = 500; youY = 380; }
             if (courtData.you === 'top') { youX = 300; youY = 420; }
+            if (courtData.you === 'right-wing') { youX = 450; youY = 300; }
             if (courtData.you === 'transition') { youX = 300; youY = 450; }
             
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
             ctx.beginPath();
-            ctx.arc(youX, youY, 25, 0, Math.PI * 2);
+            ctx.arc(youX + 4, youY + 4, 32, 0, Math.PI * 2);
             ctx.fill();
+            
+            // Player circle with gradient
+            const youGrad = ctx.createRadialGradient(youX, youY, 0, youX, youY, 32);
+            youGrad.addColorStop(0, '#ffb820');
+            youGrad.addColorStop(1, '#ff6b35');
+            ctx.fillStyle = youGrad;
+            ctx.beginPath();
+            ctx.arc(youX, youY, 32, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 5;
             ctx.stroke();
             
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px Inter';
+            ctx.font = 'bold 16px Inter';
             ctx.textAlign = 'center';
-            ctx.fillText('YOU', youX, youY + 45);
+            ctx.fillText('YOU', youX, youY + 50);
             
-            // Gap indicator
+            // Gap indicator (attack lane)
             if (courtData.gap === 'baseline') {
                 ctx.strokeStyle = '#00ff88';
-                ctx.lineWidth = 6;
-                ctx.setLineDash([10, 10]);
+                ctx.lineWidth = 8;
+                ctx.setLineDash([12, 8]);
                 ctx.beginPath();
                 ctx.moveTo(youX, youY);
-                ctx.lineTo(520, 200);
+                ctx.lineTo(520, 150);
                 ctx.stroke();
                 ctx.setLineDash([]);
+                
+                // Arrow head
+                ctx.fillStyle = '#00ff88';
+                ctx.beginPath();
+                ctx.moveTo(520, 150);
+                ctx.lineTo(510, 160);
+                ctx.lineTo(530, 160);
+                ctx.fill();
+            }
+            
+            if (courtData.gap === 'middle' || courtData.gap === 'middle-lane') {
+                ctx.strokeStyle = '#00ff88';
+                ctx.lineWidth = 8;
+                ctx.setLineDash([12, 8]);
+                ctx.beginPath();
+                ctx.moveTo(youX, youY);
+                ctx.lineTo(300, 100);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Arrow head
+                ctx.fillStyle = '#00ff88';
+                ctx.beginPath();
+                ctx.moveTo(300, 100);
+                ctx.lineTo(290, 110);
+                ctx.lineTo(310, 110);
+                ctx.fill();
             }
         }
 
@@ -828,7 +872,8 @@
         // INIT
         // ══════════════════════════════════════════════════════════════
         loadStats();
-        renderMoves();
+        courtBgImage.onload = () => renderMoves();
+        if (courtBgImage.complete) renderMoves();
     </script>
 </body>
 </html>
