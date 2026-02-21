@@ -4,6 +4,8 @@
 
 Built for Julie — an interactive game that teaches basketball strategy through real scenarios.
 
+🔗 **[Play Now: V3 (Photorealistic Court)](https://00ainick-cmd.github.io/basketball-iq-simulator/basketball-sim-v3.html)**
+
 ## What It Does
 
 - **Live Court Visualization** — See the court, players, and defensive setups
