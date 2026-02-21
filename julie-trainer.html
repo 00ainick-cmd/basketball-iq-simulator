@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>🏀 Julie's Basketball IQ Trainer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1d35 50%, #0a0e27 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .app-container {
+            max-width: 100vw;
+            min-height: 100vh;
+            padding: 12px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,148,255,0.15) 100%);
+            border-radius: 20px;
+            border: 2px solid rgba(255,107,53,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        
+        .player-badge {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            background-image: url('julie-assets/001-custom-basketball-player-icon-for-a-12-y.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: 4px solid #ff6b35;
+            box-shadow: 0 8px 24px rgba(255,107,53,0.5), 0 0 40px rgba(255,107,53,0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(255,107,53,0.5), 0 0 40px rgba(255,107,53,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 32px rgba(255,107,53,0.7), 0 0 60px rgba(255,107,53,0.5); }
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa500 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 12px rgba(255,107,53,0.3);
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 14px 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:active {
+            transform: scale(0.95);
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #8b90a0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Court */
+        .court-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        
+        .court-logo-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+            background-image: url('julie-assets/001-custom-basketball-logo-design-for-julie-.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        #court-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            margin-bottom: 12px;
+            z-index: 2;
+        }
+        
+        #basketball-court {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 60vh;
+            object-fit: contain;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+        
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        
+        .player-you { background: linear-gradient(135deg, #ff6b35 0%, #ffa500 100%); }
+        .player-teammate { background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%); }
+        .player-defender { background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%); }
+        
+        /* Scenario */
+        .scenario-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        
+        .scenario-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .scenario-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #b0b5c3;
+            font-weight: 500;
+        }
+        
+        /* Plays */
+        .plays-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .play-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            border: 3px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .play-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b35 0%, #ffa500 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .play-card:active {
+            transform: scale(0.97);
+            border-color: rgba(255,107,53,0.8);
+            background: linear-gradient(135deg, rgba(255,107,53,0.2) 0%, rgba(255,107,53,0.1) 100%);
+        }
+        
+        .play-card:active::before {
+            transform: scaleX(1);
+        }
+        
+        .play-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .play-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .play-description {
+            font-size: 0.95rem;
+            color: #8b90a0;
+            line-height: 1.5;
+        }
+        
+        /* Result */
+        .result-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(30px);
+            border: 3px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 16px;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .result-card.show { display: block; }
+        
+        .result-card.success {
+            border-color: rgba(16,185,129,0.6);
+            background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.08) 100%);
+        }
+        
+        .result-card.partial {
+            border-color: rgba(251,191,36,0.6);
+            background: linear-gradient(135deg, rgba(251,191,36,0.15) 0%, rgba(251,191,36,0.08) 100%);
+        }
+        
+        .result-card.failure {
+            border-color: rgba(239,68,68,0.6);
+            background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.08) 100%);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+        
+        .result-badge.success {
+            background: rgba(16,185,129,0.25);
+            color: #10b981;
+        }
+        
+        .result-badge.partial {
+            background: rgba(251,191,36,0.25);
+            color: #fbbf24;
+        }
+        
+        .result-badge.failure {
+            background: rgba(239,68,68,0.25);
+            color: #ef4444;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+        
+        .result-title.success { color: #10b981; }
+        .result-title.partial { color: #fbbf24; }
+        .result-title.failure { color: #ef4444; }
+        
+        .result-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #d1d5db;
+            margin-bottom: 18px;
+        }
+        
+        .coaching-box {
+            background: rgba(99,102,241,0.15);
+            border-left: 5px solid #6366f1;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 18px 0;
+        }
+        
+        .coaching-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #818cf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .coaching-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            font-size: 1.15rem;
+            font-weight: 900;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.4);
+            margin-top: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .next-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="player-badge"></div>
+            <h1>JULIE</h1>
+            <div class="subtitle">Point Guard • IQ Trainer</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Reps</div>
+                <div class="stat-value" id="scenarios-completed">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Smart</div>
+                <div class="stat-value" id="smart-decisions">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">IQ</div>
+                <div class="stat-value" id="bball-iq">0%</div>
+            </div>
+        </div>
+
+        <div class="court-section">
+            <div class="court-logo-watermark"></div>
+            <div id="court-container">
+                <canvas id="basketball-court" width="1792" height="1280"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot player-you"></div>
+                    <span>JULIE</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot player-teammate"></div>
+                    <span>Teammate</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot player-defender"></div>
+                    <span>Defense</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scenario-card" id="scenario-panel">
+            <div class="scenario-number" id="scenario-number">Scenario 1</div>
+            <div class="scenario-title" id="scenario-title">Loading...</div>
+            <div class="scenario-description" id="scenario-desc">Please wait...</div>
+            <div class="plays-grid" id="play-options"></div>
+        </div>
+
+        <div class="result-card" id="result-panel">
+            <div class="result-badge" id="result-badge">Result</div>
+            <div class="result-title" id="result-title">Result</div>
+            <div class="result-text" id="result-desc"></div>
+            <div id="coaching-section"></div>
+            <button class="next-btn" onclick="nextScenario()">NEXT REP →</button>
+        </div>
+    </div>
+
+    <script>
+        let stats = { completed: 0, smart: 0, total: 0 };
+        const canvas = document.getElementById('basketball-court');
+        const ctx = canvas.getContext('2d');
+        
+        const courtBg = new Image();
+        courtBg.src = 'court-images/001-professional-indoor-basketball-court-fro.png';
+
+        const scenarios = [
+            {
+                id: 1,
+                title: "Pick & Roll Decision — Attack or Kick?",
+                description: "Your teammate sets a screen. The defender goes under. You have space to attack the paint or kick out to your open shooter. What's the move?",
+                court: {
+                    you: { x: 900, y: 900, hasBall: true },
+                    teammates: [
+                        { x: 900, y: 600, label: "Screen" },
+                        { x: 1350, y: 400, label: "Shooter" },
+                        { x: 450, y: 400, label: "Corner" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 750 },
+                        { x: 900, y: 350 },
+                        { x: 1350, y: 550 },
+                        { x: 450, y: 550 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🔥",
+                        title: "ATTACK THE PAINT",
+                        description: "Drive hard to the basket — defender went under, you have the lane",
+                        result: "success",
+                        outcome: "AGGRESSIVE POINT GUARD",
+                        details: "Perfect read! When the defender goes under the screen, that's your green light to attack. You got all the way to the rim for an easy finish. This is what elite point guards do.",
+                        coaching: "Defender went under = drive it. When they give you the lane, TAKE IT. Don't settle for the jumper when you can get a layup.",
+                        points: 2
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Kick to Shooter",
+                        description: "Pass to the open three-point shooter on the wing",
+                        result: "partial",
+                        outcome: "SAFE PLAY",
+                        details: "Your shooter knocked down the three. Not bad, but YOU had a wide-open lane to the basket. When the defense gives you the drive, attack first.",
+                        coaching: "The pass wasn't wrong, but an elite point guard recognizes when THEY have the advantage. Defender under the screen = your layup, not their three.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Hesitate & Reset",
+                        description: "Pull back and reset the offense",
+                        result: "failure",
+                        outcome: "OPPORTUNITY WASTED",
+                        details: "You had a wide-open lane and an open shooter, but you hesitated. By the time you reset, the defense recovered and you got nothing.",
+                        coaching: "Point guards can't be afraid to attack when the defense gives them space. Hesitation kills advantages. See the opening, attack it NOW.",
+                        points: 0
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Iso Attack — Read the Defense",
+                description: "You're one-on-one at the top of the key. Defender's weight is on their heels and they're playing too high. Your teammates are spaced. Do you attack or pass?",
+                court: {
+                    you: { x: 900, y: 850, hasBall: true },
+                    teammates: [
+                        { x: 450, y: 650, label: "Wing" },
+                        { x: 1350, y: 650, label: "Wing" },
+                        { x: 900, y: 300, label: "Post" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 700 },
+                        { x: 450, y: 800 },
+                        { x: 1350, y: 800 },
+                        { x: 900, y: 400 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "💨",
+                        title: "BLOW BY",
+                        description: "Explode past the defender with a hard first step",
+                        result: "success",
+                        outcome: "ELITE ATTACK",
+                        details: "You read the defender's positioning perfectly. Their weight was back, so you exploded past them for an easy finish. That's high-level point guard play.",
+                        coaching: "When a defender is on their heels and playing high, attack their front foot. One hard dribble and they can't recover. This is exactly what you should do.",
+                        points: 2
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Swing to Wing",
+                        description: "Pass to the wing and let them work",
+                        result: "failure",
+                        outcome: "MISSED ADVANTAGE",
+                        details: "You had your defender beat, but you passed it up. Your teammate forced a contested shot. When YOU have the advantage, take it.",
+                        coaching: "Elite point guards attack mismatches. Your defender was vulnerable — that's YOUR bucket to take. Don't give away your advantages.",
+                        points: 0
+                    },
+                    {
+                        icon: "⚡",
+                        title: "Hesitation Move",
+                        description: "Hit them with a hesitation dribble then decide",
+                        result: "partial",
+                        outcome: "OKAY SETUP",
+                        details: "The hesi worked and you got to the rim, but you could've just attacked immediately. Extra moves = more time for help defense.",
+                        coaching: "When you have a clear advantage, don't complicate it. The defender was already beat — just attack. Save the moves for when you actually need them.",
+                        points: 1
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Driving Lane — Open or Trap?",
+                description: "You're on the wing with the ball. You see an open driving lane to the basket, but there's a help defender lurking in the paint. Attack or pull back?",
+                court: {
+                    you: { x: 1200, y: 700, hasBall: true },
+                    teammates: [
+                        { x: 600, y: 900, label: "Guard" },
+                        { x: 500, y: 350, label: "Corner" },
+                        { x: 900, y: 450, label: "Post" }
+                    ],
+                    defenders: [
+                        { x: 1050, y: 650 },
+                        { x: 750, y: 400 },
+                        { x: 600, y: 1000 },
+                        { x: 500, y: 500 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🏀",
+                        title: "DRIVE & DISH",
+                        description: "Attack the lane, draw the help, kick to open corner",
+                        result: "success",
+                        outcome: "HIGH IQ PLAY",
+                        details: "Perfect! You attacked the lane aggressively, forced the help defender to commit, then kicked it to the wide-open corner shooter for three. This is elite point guard play.",
+                        coaching: "Great point guards attack even when help is there — because attacking creates better shots for teammates. You collapsed the defense and made the right read.",
+                        points: 2
+                    },
+                    {
+                        icon: "💪",
+                        title: "DRIVE THROUGH CONTACT",
+                        description: "Attack hard, finish through the help defender",
+                        result: "partial",
+                        outcome: "TOUGH FINISH",
+                        details: "You got to the line and made 1 of 2. Physical play, but there was an easier bucket available if you kicked it out.",
+                        coaching: "Attacking isn't always wrong, but smart point guards take the EASY bucket. When help is waiting, make them pay by finding the open man.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Pull Back to Perimeter",
+                        description: "Don't risk the drive, reset the offense",
+                        result: "failure",
+                        outcome: "TOO PASSIVE",
+                        details: "You pulled back and the defense recovered. You never created any advantage and settled for a contested jumper later.",
+                        coaching: "Point guards can't be afraid of help defense. Attack to CREATE opportunities, even if you're not finishing. Your job is to collapse defenses.",
+                        points: 0
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Contact Finish — Power Through or Dish?",
+                description: "You're driving to the rim. Two defenders are collapsing on you. You can try to finish through contact or kick out to your wide-open teammate. What do you do?",
+                court: {
+                    you: { x: 900, y: 550, hasBall: true },
+                    teammates: [
+                        { x: 1350, y: 800, label: "Open" },
+                        { x: 450, y: 800, label: "Corner" },
+                        { x: 700, y: 1000, label: "Trail" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 400 },
+                        { x: 1050, y: 500 },
+                        { x: 1350, y: 950 },
+                        { x: 450, y: 950 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "🎯",
+                        title: "KICK TO OPEN SHOOTER",
+                        description: "Dish it out to your wide-open teammate",
+                        result: "success",
+                        outcome: "UNSELFISH POINT GUARD",
+                        details: "Perfect decision! Two defenders collapsed on you, which means someone was WIDE OPEN. You found them for an easy bucket. This is elite court vision.",
+                        coaching: "When two defenders commit to you, your job is done — someone is open. Find them. This is the difference between good and great point guards.",
+                        points: 2
+                    },
+                    {
+                        icon: "💥",
+                        title: "FINISH THROUGH CONTACT",
+                        description: "Power through both defenders for the and-1",
+                        result: "partial",
+                        outcome: "TOUGH BUT RISKY",
+                        details: "You drew the foul and got to the line. Gutsy play, but with two defenders on you, the kickout was the smarter play.",
+                        coaching: "Finishing through contact is great when it works, but elite point guards take the HIGHEST percentage shot. Two on you = one teammate open. Find them.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Force the Layup",
+                        description: "Try to finish anyway — don't pass",
+                        result: "failure",
+                        outcome: "FORCED SHOT",
+                        details: "Two defenders blocked your shot. You forced it when you had a wide-open teammate. This is low basketball IQ.",
+                        coaching: "Point guards who force shots into multiple defenders don't play at the next level. When the defense collapses, MAKE THEM PAY by finding the open player.",
+                        points: 0
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Fast Break — Push It or Set Up?",
+                description: "You get the rebound and the defense is scrambling back. You can push it yourself for a layup or slow down and set up your teammates. What's the play?",
+                court: {
+                    you: { x: 900, y: 1050, hasBall: true },
+                    teammates: [
+                        { x: 600, y: 750, label: "Wing" },
+                        { x: 1200, y: 750, label: "Wing" },
+                        { x: 900, y: 400, label: "Trail" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 600 },
+                        { x: 750, y: 400 },
+                        { x: 1050, y: 400 }
+                    ]
+                },
+                plays: [
+                    {
+                        icon: "⚡",
+                        title: "PUSH IT YOURSELF",
+                        description: "Attack in transition before the defense sets",
+                        result: "success",
+                        outcome: "AGGRESSIVE PLAYMAKING",
+                        details: "You saw the opening and attacked immediately before the defense could set. Easy layup. This is what elite point guards do — attack opportunities.",
+                        coaching: "The defense was scrambling, YOU had the advantage, and you took it. Never slow down a fast break when you have the numbers. Attack first, pass second.",
+                        points: 2
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Hit the Wing in Stride",
+                        description: "Pass ahead to your teammate for an easy finish",
+                        result: "partial",
+                        outcome: "GOOD PASS",
+                        details: "Your teammate scored, but YOU had a clear lane to the basket. When you have the advantage yourself, take it.",
+                        coaching: "Passing isn't always the answer. When YOU are the one with the open lane, attack it. Save the pass for when they have a BETTER look than you.",
+                        points: 1
+                    },
+                    {
+                        icon: "❌",
+                        title: "Slow Down & Set Up",
+                        description: "Pull it back and run a half-court set",
+                        result: "failure",
+                        outcome: "WASTED OPPORTUNITY",
+                        details: "You gave up a 3-on-3 fast break advantage for a contested half-court possession. The defense recovered and you got nothing.",
+                        coaching: "NEVER slow down when you have a numbers advantage or transition opportunity. Fast breaks are the highest percentage scoring chances in basketball. ATTACK.",
+                        points: 0
+                    }
+                ]
+            }
+        ];
+
+        let currentScenarioIndex = 0;
+        let currentScenario = null;
+
+        function drawCourt(scenarioData) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(courtBg, 0, 0, canvas.width, canvas.height);
+
+            // Draw defenders
+            scenarioData.defenders.forEach(d => {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.arc(d.x + 6, d.y + 6, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                const defGrad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, 35);
+                defGrad.addColorStop(0, '#ff4757');
+                defGrad.addColorStop(1, '#d63031');
+                ctx.fillStyle = defGrad;
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 22px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('D', d.x, d.y);
+            });
+
+            // Draw teammates
+            scenarioData.teammates.forEach(t => {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.arc(t.x + 6, t.y + 6, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                const teamGrad = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, 35);
+                teamGrad.addColorStop(0, '#00d4ff');
+                teamGrad.addColorStop(1, '#0077cc');
+                ctx.fillStyle = teamGrad;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(t.label, t.x, t.y + 58);
+
+                if (t.moving) {
+                    ctx.strokeStyle = '#10b981';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.moveTo(t.x, t.y + 38);
+                    ctx.lineTo(t.x, t.y - 55);
+                    ctx.stroke();
+                    ctx.fillStyle = '#10b981';
+                    ctx.beginPath();
+                    ctx.moveTo(t.x, t.y - 58);
+                    ctx.lineTo(t.x - 10, t.y - 42);
+                    ctx.lineTo(t.x + 10, t.y - 42);
+                    ctx.fill();
+                }
+            });
+
+            // Draw Julie (YOU)
+            const youX = scenarioData.you.x;
+            const youY = scenarioData.you.y;
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.beginPath();
+            ctx.arc(youX + 7, youY + 7, 45, 0, Math.PI * 2);
+            ctx.fill();
+            
+            const youGrad = ctx.createRadialGradient(youX, youY, 0, youX, youY, 45);
+            youGrad.addColorStop(0, '#ffb820');
+            youGrad.addColorStop(1, '#ff6b35');
+            ctx.fillStyle = youGrad;
+            ctx.beginPath();
+            ctx.arc(youX, youY, 45, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+
+            // Ball
+            if (scenarioData.you.hasBall) {
+                ctx.fillStyle = '#ff6b35';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(youX + 35, youY - 35, 18, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(youX + 35 - 12, youY - 35);
+                ctx.lineTo(youX + 35 + 12, youY - 35);
+                ctx.moveTo(youX + 35, youY - 35 - 12);
+                ctx.lineTo(youX + 35, youY - 35 + 12);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('JULIE', youX, youY + 72);
+        }
+
+        function loadScenario(index) {
+            currentScenario = scenarios[index];
+            
+            if (courtBg.complete) {
+                drawCourt(currentScenario.court);
+            } else {
+                courtBg.onload = () => drawCourt(currentScenario.court);
+            }
+
+            document.getElementById('scenario-number').textContent = `Scenario ${currentScenario.id}`;
+            document.getElementById('scenario-title').textContent = currentScenario.title;
+            document.getElementById('scenario-desc').textContent = currentScenario.description;
+
+            const optionsContainer = document.getElementById('play-options');
+            optionsContainer.innerHTML = '';
+
+            currentScenario.plays.forEach((play, i) => {
+                const card = document.createElement('div');
+                card.className = 'play-card';
+                card.onclick = () => selectPlay(i);
+                card.innerHTML = `
+                    <div class="play-icon">${play.icon}</div>
+                    <div class="play-title">${play.title}</div>
+                    <div class="play-description">${play.description}</div>
+                `;
+                optionsContainer.appendChild(card);
+            });
+
+            document.getElementById('result-panel').classList.remove('show');
+            document.getElementById('scenario-panel').style.display = 'block';
+        }
+
+        function selectPlay(playIndex) {
+            stats.total++;
+            const play = currentScenario.plays[playIndex];
+
+            if (play.result === 'success') stats.smart++;
+
+            document.getElementById('scenario-panel').style.display = 'none';
+            
+            const resultPanel = document.getElementById('result-panel');
+            resultPanel.className = 'result-card show ' + play.result;
+            
+            const badge = document.getElementById('result-badge');
+            badge.className = 'result-badge ' + play.result;
+            badge.textContent = play.result === 'success' ? '✓ SMART' : play.result === 'partial' ? '⚠ OK' : '✗ MISS';
+            
+            const resultTitle = document.getElementById('result-title');
+            resultTitle.textContent = play.outcome;
+            resultTitle.className = 'result-title ' + play.result;
+
+            document.getElementById('result-desc').textContent = play.details;
+
+            document.getElementById('coaching-section').innerHTML = `
+                <div class="coaching-box">
+                    <div class="coaching-label">
+                        <span>🧠</span>
+                        <span>AI COACH</span>
+                    </div>
+                    <div class="coaching-text">${play.coaching}</div>
+                </div>
+            `;
+
+            updateStats();
+            
+            // Text-to-speech coach feedback
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(play.coaching);
+                utterance.rate = 0.95;
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function nextScenario() {
+            stats.completed++;
+            currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            loadScenario(currentScenarioIndex);
+            updateStats();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStats() {
+            document.getElementById('scenarios-completed').textContent = stats.completed;
+            document.getElementById('smart-decisions').textContent = stats.smart;
+            const iq = stats.total > 0 ? Math.round((stats.smart / stats.total) * 100) : 0;
+            document.getElementById('bball-iq').textContent = iq + '%';
+        }
+
+        loadScenario(0);
+        updateStats();
+    </script>
+</body>
+</html>
