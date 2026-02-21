@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>🏀 Basketball IQ Trainer v5 — Julie & Amelia</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1d35 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .app {
+            max-width: 100vw;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.2) 0%, rgba(0,148,255,0.2) 100%);
+            border-radius: 20px;
+            border: 2px solid rgba(255,107,53,0.4);
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa500 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+        
+        .lesson-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .lesson-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 16px 8px;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .lesson-btn.active {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            border-color: #ff6b35;
+            box-shadow: 0 4px 16px rgba(255,107,53,0.4);
+        }
+        
+        .lesson-btn:active:not(.active) {
+            transform: scale(0.95);
+        }
+        
+        .court-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        #court-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            background: #1a472a;
+        }
+        
+        #basketball-court {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        
+        .court-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            margin-top: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 14px;
+            border-radius: 20px;
+        }
+        
+        .legend-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+        }
+        
+        .player-you { background: linear-gradient(135deg, #ff6b35 0%, #ffa500 100%); }
+        .player-teammate { background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%); }
+        .player-defender { background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%); }
+        
+        .teaching-card {
+            background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.15) 100%);
+            border: 2px solid rgba(99,102,241,0.4);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .teaching-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #818cf8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .teaching-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+            margin-bottom: 16px;
+        }
+        
+        .key-points {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid #6366f1;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .key-point {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d1d5db;
+            margin-bottom: 10px;
+        }
+        
+        .key-point strong {
+            color: #ffa500;
+        }
+        
+        .scenario-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+        
+        .scenario-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #b0b5c3;
+            margin-bottom: 20px;
+        }
+        
+        .read-highlight {
+            background: rgba(251,191,36,0.2);
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+        }
+        
+        .read-label {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #fbbf24;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .read-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.5;
+        }
+        
+        .moves-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 20px;
+        }
+        
+        .move-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 3px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 22px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .move-card:active {
+            transform: scale(0.97);
+            border-color: rgba(255,107,53,0.8);
+            background: linear-gradient(135deg, rgba(255,107,53,0.2) 0%, rgba(255,107,53,0.1) 100%);
+        }
+        
+        .move-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+        
+        .move-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .move-description {
+            font-size: 1rem;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+            border: 3px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 28px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .result-card.show { display: block; }
+        
+        .result-card.success {
+            border-color: rgba(16,185,129,0.6);
+            background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.1) 100%);
+        }
+        
+        .result-card.failure {
+            border-color: rgba(239,68,68,0.6);
+            background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(239,68,68,0.1) 100%);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+        
+        .result-title.success { color: #10b981; }
+        .result-title.failure { color: #ef4444; }
+        
+        .result-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .coach-tip {
+            background: rgba(99,102,241,0.15);
+            border-left: 5px solid #6366f1;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+        
+        .coach-tip-label {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #818cf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .coach-tip-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #fff;
+            border: none;
+            padding: 20px;
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 20px;
+        }
+        
+        .next-btn:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <h1>BASKETBALL IQ TRAINER</h1>
+            <div class="subtitle">Julie & Amelia • Betty Lennox Method</div>
+        </div>
+
+        <div class="lesson-nav">
+            <button class="lesson-btn active" onclick="loadLesson(1)">
+                Lesson 1<br>Read Defense
+            </button>
+            <button class="lesson-btn" onclick="loadLesson(2)">
+                Lesson 2<br>Attack Moves
+            </button>
+            <button class="lesson-btn" onclick="loadLesson(3)">
+                Lesson 3<br>Game Time
+            </button>
+        </div>
+
+        <div id="content-area"></div>
+    </div>
+
+    <script>
+        const lessons = {
+            1: {
+                title: "LESSON 1: Reading the Defender",
+                teaching: `<div class="teaching-card">
+                    <div class="teaching-title">🎯 What Makes a Defender Vulnerable?</div>
+                    <div class="teaching-text">
+                        Before you can attack, you need to READ the defender. Elite point guards see three things:
+                    </div>
+                    <div class="key-points">
+                        <div class="key-point"><strong>1. FEET:</strong> Where is their weight? Forward = they're rushing you. Back = they're scared of your speed.</div>
+                        <div class="key-point"><strong>2. HIPS:</strong> Square to you = ready to move. Turned = you can attack the opposite direction.</div>
+                        <div class="key-point"><strong>3. HANDS:</strong> Reaching = off-balance. Low = you can shoot. High = you can drive.</div>
+                    </div>
+                </div>`,
+                court: {
+                    you: { x: 900, y: 950, hasBall: true },
+                    teammates: [],
+                    defenders: [
+                        { x: 900, y: 700, stance: "tight", label: "TIGHT\nWeight Forward" }
+                    ],
+                    arrows: []
+                },
+                scenario: {
+                    title: "Practice Read: Tight Defender",
+                    description: "You have the ball at the top. Look at the defender — their weight is FORWARD, hands are LOW, trying to pressure you.",
+                    read: "Defender is TIGHT with weight forward → They're off-balance. Attack NOW.",
+                    moves: [
+                        {
+                            icon: "⚡",
+                            title: "CROSSOVER & ATTACK",
+                            description: "One quick crossover, blow by them",
+                            result: "success",
+                            outcome: "PERFECT READ! 🔥",
+                            feedback: "When a defender is rushing forward with low hands, they CAN'T recover from a quick crossover. You just got by them for an easy layup. That's elite point guard play.",
+                            coachTip: "Coach Betty would say: 'When they're tight and pressing, ONE move gets you by them. Don't hesitate — ATTACK.'"
+                        },
+                        {
+                            icon: "🎯",
+                            title: "Pull-Up Jumper",
+                            description: "Step back and shoot over them",
+                            result: "failure",
+                            outcome: "MISSED OPPORTUNITY",
+                            feedback: "You had them BEAT. Their weight was forward — you could've blown by for a layup. Instead you settled for a contested jumper and missed.",
+                            coachTip: "When the defender gives you the lane, TAKE IT. Don't settle for harder shots when easier ones are available. Attack first, shoot second."
+                        },
+                        {
+                            icon: "❌",
+                            title: "Hesitate & Reset",
+                            description: "Pull back and look for a pass",
+                            result: "failure",
+                            outcome: "TOO PASSIVE",
+                            feedback: "The defender was vulnerable and you had the advantage. Hesitating let them recover. Elite guards attack when they see the opening.",
+                            coachTip: "Coach Betty wants you AGGRESSIVE. When you read the defense and see the opening, GO. Hesitation kills advantages."
+                        }
+                    ]
+                }
+            },
+            2: {
+                title: "LESSON 2: Your Attack Moves",
+                teaching: `<div class="teaching-card">
+                    <div class="teaching-title">💪 When to Use Each Move</div>
+                    <div class="teaching-text">
+                        You've been practicing these moves with Coach Betty. Here's when to use them in games:
+                    </div>
+                    <div class="key-points">
+                        <div class="key-point"><strong>CROSSOVER:</strong> When defender is tight and pressing forward. Gets you by them FAST.</div>
+                        <div class="key-point"><strong>BETWEEN-THE-LEGS:</strong> When defender is playing you side-to-side. Creates space to attack opposite direction.</div>
+                        <div class="key-point"><strong>HESITATION (HESI):</strong> When defender is playing back. Freeze them, then explode.</div>
+                        <div class="key-point"><strong>PULL-UP:</strong> When defender is giving you space and help is far. Take the open shot.</div>
+                    </div>
+                </div>`,
+                court: {
+                    you: { x: 1200, y: 800, hasBall: true },
+                    teammates: [
+                        { x: 500, y: 600, label: "Post" },
+                        { x: 900, y: 1000, label: "Guard" }
+                    ],
+                    defenders: [
+                        { x: 1100, y: 700, stance: "off", label: "PLAYING OFF\nWeight Back" },
+                        { x: 600, y: 500, label: "Help" }
+                    ],
+                    arrows: []
+                },
+                scenario: {
+                    title: "Practice: Pick Your Move",
+                    description: "You're on the wing. Defender is playing OFF you (weight back, giving space). Help defender is in the paint. Which move do you use?",
+                    read: "Defender playing OFF + Help is far → Perfect for HESI then ATTACK or PULL-UP",
+                    moves: [
+                        {
+                            icon: "⚡",
+                            title: "HESITATION → DRIVE",
+                            description: "Hesi move to freeze them, then attack hard",
+                            result: "success",
+                            outcome: "ELITE MOVE SELECTION! 🏀",
+                            feedback: "Perfect! Defender was playing back, so the hesi froze them. Once they bit, you attacked the lane for an easy finish. That's exactly how Betty teaches it.",
+                            coachTip: "When defenders give you space, the HESI is your best friend. Freeze them, then explode. You just did it perfectly."
+                        },
+                        {
+                            icon: "🎯",
+                            title: "PULL-UP JUMPER",
+                            description: "Take the open shot they're giving you",
+                            result: "success",
+                            outcome: "SMART SHOT! ✓",
+                            feedback: "They gave you space, you took the shot and made it. Not bad, but you also could've attacked for an easier look at the rim.",
+                            coachTip: "Pull-up isn't wrong when you're open, but remember — Coach Betty wants you AGGRESSIVE. If you can get to the rim, attack first."
+                        },
+                        {
+                            icon: "❌",
+                            title: "CROSSOVER",
+                            description: "Quick crossover and drive",
+                            result: "failure",
+                            outcome: "WRONG MOVE CHOICE",
+                            feedback: "Crossover works when defenders are TIGHT. This defender was already playing back — the crossover didn't create any advantage. You ran into help defense.",
+                            coachTip: "Use the RIGHT move for the situation. Crossover = tight defense. Hesi = defender playing off. Know the difference."
+                        }
+                    ]
+                }
+            },
+            3: {
+                title: "LESSON 3: Game Time Application",
+                teaching: `<div class="teaching-card">
+                    <div class="teaching-title">🏆 Putting It All Together</div>
+                    <div class="teaching-text">
+                        Now you're in a REAL game situation. Use everything you've learned:
+                    </div>
+                    <div class="key-points">
+                        <div class="key-point"><strong>STEP 1:</strong> READ the defender (feet, hips, hands)</div>
+                        <div class="key-point"><strong>STEP 2:</strong> PICK the right move for the situation</div>
+                        <div class="key-point"><strong>STEP 3:</strong> ATTACK with confidence — no hesitation</div>
+                        <div class="key-point"><strong>REMEMBER:</strong> Coach Betty wants you aggressive. When you see the opening, GO.</div>
+                    </div>
+                </div>`,
+                court: {
+                    you: { x: 900, y: 900, hasBall: true },
+                    teammates: [
+                        { x: 900, y: 500, label: "Screen" },
+                        { x: 1300, y: 600, label: "Shooter" },
+                        { x: 500, y: 600, label: "Corner" }
+                    ],
+                    defenders: [
+                        { x: 900, y: 750, stance: "under", label: "GOES UNDER\nScreen" },
+                        { x: 900, y: 400, label: "Help" },
+                        { x: 1300, y: 750, label: "Wing D" }
+                    ],
+                    arrows: [
+                        { from: {x: 900, y: 750}, to: {x: 1100, y: 650}, color: "#ff4757", label: "Recovery" }
+                    ]
+                },
+                scenario: {
+                    title: "GAME SITUATION: Pick & Roll",
+                    description: "Your teammate sets a screen at the top. Defender goes UNDER the screen. You have an open lane to attack, or you can kick to your shooter. What do you do?",
+                    read: "Defender goes UNDER screen = WIDE OPEN LANE. This is YOUR basket.",
+                    moves: [
+                        {
+                            icon: "🔥",
+                            title: "ATTACK THE PAINT",
+                            description: "Drive hard to the basket — lane is wide open",
+                            result: "success",
+                            outcome: "AGGRESSIVE POINT GUARD! 🏆",
+                            feedback: "YES! When the defender goes under a screen, that's a green light to attack. You got all the way to the rim for an easy finish. This is EXACTLY what Coach Betty wants to see.",
+                            coachTip: "This is the mentality we're building. Defender gives you space → ATTACK IT. You read the situation perfectly and took what the defense gave you."
+                        },
+                        {
+                            icon: "🎯",
+                            title: "Kick to Shooter",
+                            description: "Pass to the open shooter on the wing",
+                            result: "failure",
+                            outcome: "TOO UNSELFISH",
+                            feedback: "Your shooter was open, but YOU had a WIDE OPEN lane to the basket. When the defense gives you a layup, take it. Don't pass up easy buckets.",
+                            coachTip: "Being unselfish is good, but elite point guards know when THEY have the best shot. Defender under the screen = YOUR layup. Take it."
+                        },
+                        {
+                            icon: "❌",
+                            title: "Pull-Up from Three",
+                            description: "Step back and shoot the three",
+                            result: "failure",
+                            outcome: "POOR SHOT SELECTION",
+                            feedback: "You had a LAYUP and you settled for a contested three-pointer. That's low basketball IQ. Always take the easier shot.",
+                            coachTip: "Never settle for a harder shot when an easier one is available. Layup > three-pointer. ALWAYS."
+                        }
+                    ]
+                }
+            }
+        };
+
+        let currentLesson = 1;
+
+        function loadLesson(num) {
+            currentLesson = num;
+            
+            // Update nav buttons
+            document.querySelectorAll('.lesson-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i + 1 === num);
+            });
+            
+            const lesson = lessons[num];
+            const content = document.getElementById('content-area');
+            
+            content.innerHTML = `
+                ${lesson.teaching}
+                
+                <div class="court-section">
+                    <canvas id="basketball-court" width="1792" height="1280"></canvas>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-icon player-you"></div>
+                            <span>YOU</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-icon player-teammate"></div>
+                            <span>Teammate</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-icon player-defender"></div>
+                            <span>Defense</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-title">${lesson.scenario.title}</div>
+                    <div class="scenario-description">${lesson.scenario.description}</div>
+                    
+                    <div class="read-highlight">
+                        <div class="read-label">⚡ The Read:</div>
+                        <div class="read-text">${lesson.scenario.read}</div>
+                    </div>
+                    
+                    <div class="moves-grid" id="moves-container"></div>
+                </div>
+                
+                <div class="result-card" id="result-panel"></div>
+            `;
+            
+            drawCourt(lesson.court);
+            renderMoves(lesson.scenario.moves);
+        }
+
+        function drawCourt(data) {
+            const canvas = document.getElementById('basketball-court');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Court background
+            const courtGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            courtGrad.addColorStop(0, '#c4915e');
+            courtGrad.addColorStop(0.5, '#b8874d');
+            courtGrad.addColorStop(1, '#c4915e');
+            ctx.fillStyle = courtGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Court lines
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(900, 100, 300, 0.3, Math.PI - 0.3);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(900, 450, 80, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.strokeRect(550, 100, 700, 350);
+            
+            // Draw arrows
+            if (data.arrows) {
+                data.arrows.forEach(arrow => {
+                    ctx.strokeStyle = arrow.color;
+                    ctx.lineWidth = 6;
+                    ctx.setLineDash([10, 10]);
+                    ctx.beginPath();
+                    ctx.moveTo(arrow.from.x, arrow.from.y);
+                    ctx.lineTo(arrow.to.x, arrow.to.y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    
+                    // Arrow head
+                    const angle = Math.atan2(arrow.to.y - arrow.from.y, arrow.to.x - arrow.from.x);
+                    ctx.fillStyle = arrow.color;
+                    ctx.beginPath();
+                    ctx.moveTo(arrow.to.x, arrow.to.y);
+                    ctx.lineTo(arrow.to.x - 15 * Math.cos(angle - Math.PI / 6), arrow.to.y - 15 * Math.sin(angle - Math.PI / 6));
+                    ctx.lineTo(arrow.to.x - 15 * Math.cos(angle + Math.PI / 6), arrow.to.y - 15 * Math.sin(angle + Math.PI / 6));
+                    ctx.fill();
+                });
+            }
+            
+            // Draw defenders with stance indicators
+            data.defenders.forEach(d => {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.arc(d.x + 7, d.y + 7, 45, 0, Math.PI * 2);
+                ctx.fill();
+                
+                const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, 45);
+                grad.addColorStop(0, '#ff4757');
+                grad.addColorStop(1, '#d63031');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, 45, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 6;
+                ctx.stroke();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 26px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('D', d.x, d.y);
+                
+                // Label
+                if (d.label) {
+                    ctx.font = 'bold 16px Inter';
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 4;
+                    const lines = d.label.split('\n');
+                    lines.forEach((line, i) => {
+                        ctx.strokeText(line, d.x, d.y + 75 + (i * 22));
+                        ctx.fillText(line, d.x, d.y + 75 + (i * 22));
+                    });
+                }
+            });
+            
+            // Draw teammates
+            data.teammates.forEach(t => {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.arc(t.x + 7, t.y + 7, 40, 0, Math.PI * 2);
+                ctx.fill();
+                
+                const grad = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, 40);
+                grad.addColorStop(0, '#00d4ff');
+                grad.addColorStop(1, '#0077cc');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, 40, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(t.label, t.x, t.y + 65);
+            });
+            
+            // Draw YOU
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.beginPath();
+            ctx.arc(data.you.x + 8, data.you.y + 8, 55, 0, Math.PI * 2);
+            ctx.fill();
+            
+            const youGrad = ctx.createRadialGradient(data.you.x, data.you.y, 0, data.you.x, data.you.y, 55);
+            youGrad.addColorStop(0, '#ffb820');
+            youGrad.addColorStop(1, '#ff6b35');
+            ctx.fillStyle = youGrad;
+            ctx.beginPath();
+            ctx.arc(data.you.x, data.you.y, 55, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 7;
+            ctx.stroke();
+            
+            // Ball
+            if (data.you.hasBall) {
+                ctx.fillStyle = '#ff6b35';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(data.you.x + 45, data.you.y - 45, 22, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 20px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('YOU', data.you.x, data.you.y + 85);
+        }
+
+        function renderMoves(moves) {
+            const container = document.getElementById('moves-container');
+            container.innerHTML = moves.map((move, i) => `
+                <div class="move-card" onclick="selectMove(${currentLesson}, ${i})">
+                    <div class="move-icon">${move.icon}</div>
+                    <div class="move-title">${move.title}</div>
+                    <div class="move-description">${move.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectMove(lessonNum, moveIndex) {
+            const move = lessons[lessonNum].scenario.moves[moveIndex];
+            const resultPanel = document.getElementById('result-panel');
+            
+            resultPanel.className = 'result-card show ' + move.result;
+            resultPanel.innerHTML = `
+                <div class="result-title ${move.result}">${move.outcome}</div>
+                <div class="result-text">${move.feedback}</div>
+                <div class="coach-tip">
+                    <div class="coach-tip-label">🏀 COACH BETTY SAYS:</div>
+                    <div class="coach-tip-text">${move.coachTip}</div>
+                </div>
+                <button class="next-btn" onclick="nextLesson()">
+                    ${lessonNum < 3 ? 'NEXT LESSON →' : 'PRACTICE AGAIN'}
+                </button>
+            `;
+            
+            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextLesson() {
+            if (currentLesson < 3) {
+                loadLesson(currentLesson + 1);
+            } else {
+                loadLesson(1);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize
+        loadLesson(1);
+    </script>
+</body>
+</html>
