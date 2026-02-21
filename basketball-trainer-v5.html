@@ -629,29 +629,16 @@
             renderMoves(lesson.scenario.moves);
         }
 
+        const courtBgImage = new Image();
+        courtBgImage.src = 'court-images/001-professional-indoor-basketball-court-fro.png';
+
         function drawCourt(data) {
             const canvas = document.getElementById('basketball-court');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Court background
-            const courtGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            courtGrad.addColorStop(0, '#c4915e');
-            courtGrad.addColorStop(0.5, '#b8874d');
-            courtGrad.addColorStop(1, '#c4915e');
-            ctx.fillStyle = courtGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Court lines
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(900, 100, 300, 0.3, Math.PI - 0.3);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(900, 450, 80, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.strokeRect(550, 100, 700, 350);
+            // Draw realistic court background
+            ctx.drawImage(courtBgImage, 0, 0, canvas.width, canvas.height);
             
             // Draw arrows
             if (data.arrows) {
@@ -815,8 +802,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize
-        loadLesson(1);
+        // Initialize - wait for court image to load
+        courtBgImage.onload = () => loadLesson(1);
+        if (courtBgImage.complete) loadLesson(1);
     </script>
 </body>
 </html>
